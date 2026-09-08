@@ -10,7 +10,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- ========== ВСТАВКА ДЛЯ TELEGRAM (ЧАСТЬ 1) ========== -->
+<!-- ========== ВСТАВКА ДЛЯ TELEGRAM ========== -->
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
 /* Подхватываем тему Telegram */
@@ -20,7 +20,7 @@ color: var(--tg-text, #000000);
 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 margin: 0;
 padding: 0;
-overflow-y: scroll; /* ← ДОБАВЛЕНО ДЛЯ СКРОЛЛА */
+overflow-y: scroll;
 }
 button {
 background-color: var(--tg-button, #2481cc);
@@ -38,7 +38,7 @@ opacity: 0.9;
 <!-- ========== КОНЕЦ ВСТАВКИ ========== -->
 
 <style>
-/* ===== ОСНОВНЫЕ СТИЛИ ОТ КЛОДА ===== */
+/* ===== ОСНОВНЫЕ СТИЛИ ===== */
 :root{
 --paper:#F1EEE6;
 --paper-deep:#E9E4D6;
@@ -62,7 +62,7 @@ color:var(--ink);
 font-family:'Inter',sans-serif;
 font-size:16px;
 line-height:1.55;
-overflow-y: scroll; /* ← ДОБАВЛЕНО ДЛЯ СКРОЛЛА */
+overflow-y: scroll;
 }
 h1,h2,h3{
 font-family:'Fraunces',serif;
@@ -74,24 +74,19 @@ color:var(--ink);
 font-family:'Kalam',cursive;
 color:var(--pen);
 }
-a{color:inherit;text-decoration:none;}
+a{color:inherit;text-decoration:none;cursor:pointer;}
 .wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
 img,svg{display:block;max-width:100%;}
+
+/* ---------- top bar (кнопка удалена) ---------- */
 .topbar{
 display:flex;align-items:center;justify-content:space-between;
 padding:22px 28px;max-width:1080px;margin:0 auto;
 }
 .brand{font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:.2px;}
 .brand span{color:var(--pen);}
-.topbar .cta-small{
-border:1.5px solid var(--ink);
-padding:9px 18px;
-border-radius:999px;
-font-size:14px;
-font-weight:600;
-transition:background .2s ease, color .2s ease;
-}
-.topbar .cta-small:hover{background:var(--ink);color:var(--paper);}
+
+/* ---------- hero ---------- */
 .hero{
 padding:36px 0 90px;
 }
@@ -138,6 +133,8 @@ color:var(--ink-soft);
 max-width:44ch;
 }
 .hero-ctas{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px;}
+
+/* ---------- кнопки ---------- */
 .btn-primary{
 background:var(--ink);
 color:var(--paper);
@@ -147,6 +144,9 @@ font-weight:600;
 font-size:15px;
 display:inline-block;
 transition:transform .15s ease, background .2s ease;
+border:none;
+font-family:inherit;
+cursor:pointer;
 }
 .btn-primary:hover{background:var(--pen);transform:translateY(-1px);}
 .btn-ghost{
@@ -154,7 +154,13 @@ font-size:14px;
 color:var(--ink-soft);
 border-bottom:1px dashed var(--ink-soft);
 padding-bottom:2px;
+background:transparent;
+cursor:pointer;
+font-family:inherit;
 }
+.btn-ghost:hover{color:var(--pen);}
+
+/* ---------- остальные стили ---------- */
 .page-right{
 background:
 repeating-linear-gradient(var(--paper-deep) 0 1px, transparent 1px 34px);
@@ -262,6 +268,79 @@ color:var(--ink);
 .final-cta h2{font-size:32px;max-width:20ch;margin:0 auto 22px;}
 footer{border-top:1px solid var(--rule);padding:30px 0;}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;gap:10px;}
+
+/* ---------- онбординг (скрыт по умолчанию) ---------- */
+#onboarding {
+display: none;
+padding: 40px 28px;
+max-width: 600px;
+margin: 0 auto;
+background: var(--cream);
+border-radius: 12px;
+box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+}
+#onboarding.active {
+display: block;
+animation: fadeIn 0.4s ease;
+}
+@keyframes fadeIn {
+from { opacity: 0; transform: translateY(20px); }
+to { opacity: 1; transform: translateY(0); }
+}
+#onboarding h2 {
+font-size: 28px;
+margin-bottom: 8px;
+}
+#onboarding p.sub {
+color: var(--ink-soft);
+margin-bottom: 28px;
+}
+.form-group {
+margin-bottom: 20px;
+}
+.form-group label {
+display: block;
+font-weight: 600;
+font-size: 14px;
+margin-bottom: 6px;
+color: var(--ink-soft);
+}
+.form-group input,
+.form-group select {
+width: 100%;
+padding: 12px 14px;
+border: 1.5px solid var(--rule);
+border-radius: 8px;
+font-size: 15px;
+font-family: inherit;
+background: #fff;
+}
+.form-group input:focus,
+.form-group select:focus {
+outline: none;
+border-color: var(--forest);
+}
+.form-row {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 16px;
+}
+.btn-start {
+background: var(--pen);
+color: #fff;
+padding: 14px 32px;
+border-radius: 999px;
+font-weight: 600;
+font-size: 16px;
+border: none;
+cursor: pointer;
+width: 100%;
+transition: opacity 0.2s;
+}
+.btn-start:hover {
+opacity: 0.85;
+}
+
 @media(max-width:860px){
 .spread{grid-template-columns:1fr;}
 .spread::after{display:none;}
@@ -271,6 +350,7 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
 .cards{grid-template-columns:1fr 1fr;}
 .plans{grid-template-columns:1fr;}
 .pricing-wrap{padding:36px 24px;}
+.form-row{grid-template-columns:1fr;}
 }
 @media(max-width:560px){
 .cards{grid-template-columns:1fr;}
@@ -283,10 +363,9 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
 </head>
 <body>
 
-<!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
+<!-- ===== ВЕРХНЯЯ ПАНЕЛЬ (кнопка удалена) ===== -->
 <div class="topbar">
 <div class="brand">Черно<span>вик</span></div>
-<a href="https://t.me/Chern0vik_bot" class="cta-small">Открыть в Telegram</a>
 </div>
 
 <!-- ===== ГЛАВНЫЙ ЭКРАН ===== -->
@@ -297,8 +376,9 @@ footer .wrap{display:flex;justify-content:space-between;align-items:center;font-
 <h1>Английский, который можно испортить и попробовать снова</h1>
 <p class="lede">Мини-приложение в Telegram: говорите с ИИ-собеседником на любые темы, когда удобно, а он мягко поправляет и помнит, над чем вы работаете.</p>
 <div class="hero-ctas">
-<a href="https://t.me/Chern0vik_bot" class="btn-primary">Открыть в Telegram</a>
-<a href="#how" class="btn-ghost">Как это работает</a>
+<!-- ГЛАВНАЯ КНОПКА — теперь ведёт к онбордингу -->
+<button class="btn-primary" onclick="startOnboarding()">Начать бесплатно</button>
+<button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">Как это работает</button>
 </div>
 </div>
 <div class="page-right">
@@ -312,6 +392,48 @@ Almost! Small fix here:
 <div class="bubble user">Just some bread and coffee, nothing special</div>
 </div>
 </div>
+</div>
+
+<!-- ===== ОНБОРДИНГ (ФОРМА РЕГИСТРАЦИИ) ===== -->
+<div id="onboarding" class="wrap">
+<h2>✍️ Давайте познакомимся</h2>
+<p class="sub">Расскажите о себе, чтобы я подстроил разговор под ваш уровень.</p>
+
+<div class="form-row">
+<div class="form-group">
+<label>Как вас зовут?</label>
+<input type="text" id="userName" placeholder="Например, Алексей" />
+</div>
+<div class="form-group">
+<label>Ваш возраст</label>
+<input type="number" id="userAge" placeholder="22" min="10" max="99" />
+</div>
+</div>
+
+<div class="form-group">
+<label>Уровень английского</label>
+<select id="userLevel">
+<option value="A1">A1 — Начальный</option>
+<option value="A2" selected>A2 — Элементарный</option>
+<option value="B1">B1 — Средний</option>
+<option value="B2">B2 — Выше среднего</option>
+<option value="C1">C1 — Продвинутый</option>
+<option value="C2">C2 — Свободное владение</option>
+</select>
+</div>
+
+<div class="form-group">
+<label>Зачем вам практика?</label>
+<select id="userGoal">
+<option value="conversation">Свободно говорить в повседневных ситуациях</option>
+<option value="interview">Подготовка к собеседованию</option>
+<option value="exam">Подготовка к экзамену (IELTS/TOEFL)</option>
+<option value="travel">Путешествия</option>
+<option value="work">Рабочая переписка и созвоны</option>
+</select>
+</div>
+
+<button class="btn-start" onclick="startChat()">🚀 Начать общение</button>
 </div>
 
 <!-- ===== КАК ЭТО РАБОТАЕТ ===== -->
@@ -382,7 +504,7 @@ Almost! Small fix here:
 <li>Ежедневный разбор ошибок</li>
 <li>Хранит историю 30 дней</li>
 </ul>
-<a href="https://t.me/Chern0vik_bot" class="btn-primary">Начать</a>
+<button class="btn-primary" onclick="startOnboarding()">Начать</button>
 </div>
 <div class="plan pro">
 <div class="plan-name">Плюс</div>
@@ -393,7 +515,7 @@ Almost! Small fix here:
 <li>Тренировка произношения</li>
 <li>Персональный план повторения слов</li>
 </ul>
-<a href="https://t.me/Chern0vik_bot" class="btn-primary">Подписаться</a>
+<button class="btn-primary" onclick="startOnboarding()">Подписаться</button>
 </div>
 </div>
 </div>
@@ -402,7 +524,7 @@ Almost! Small fix here:
 <!-- ===== ФИНАЛЬНЫЙ ПРИЗЫВ ===== -->
 <div class="wrap final-cta">
 <h2>Ошибки — это просто черновик ✍️</h2>
-<a href="https://t.me/Chern0vik_bot" class="btn-primary">Начать говорить</a>
+<button class="btn-primary" onclick="startOnboarding()">Начать говорить</button>
 </div>
 
 <!-- ===== ПОДВАЛ ===== -->
@@ -413,35 +535,48 @@ Almost! Small fix here:
 </div>
 </footer>
 
-<!-- ========== ВСТАВКА ДЛЯ TELEGRAM (ЧАСТЬ 2) ========== -->
+<!-- ========== JAVASCRIPT ========== -->
 <script>
-// Получаем доступ к Telegram Web App
-const tg = window.Telegram.WebApp;
-
-// Сообщаем Telegram, что приложение загружено
+// ---------- Telegram ----------
+const tg = window.Telegram?.WebApp;
+if (tg) {
 tg.ready();
-
-// Разворачиваем на весь экран
 tg.expand();
-
-// Показываем главную кнопку
 tg.MainButton.setText('Отправить');
 tg.MainButton.show();
-
-// Обработчик для всех кнопок на странице
-document.querySelectorAll('a.btn-primary, a.cta-small').forEach(btn => {
-btn.addEventListener('click', function(e) {
-// Если ссылка ведет в Telegram, отправляем событие
-if (this.href.includes('t.me')) {
-e.preventDefault();
-tg.sendData('open_bot');
-tg.showAlert('Открываем бота...');
 }
+
+// ---------- Онбординг ----------
+function startOnboarding() {
+const el = document.getElementById('onboarding');
+el.classList.add('active');
+el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function startChat() {
+const name = document.getElementById('userName').value.trim();
+if (!name) {
+alert('Пожалуйста, введите ваше имя');
+return;
+}
+// Здесь позже добавим переход в чат
+alert('🎉 Привет, ' + name + '! Чат с ИИ будет доступен после подключения бэкенда.');
+// В будущем: скрыть онбординг, показать чат
+}
+
+// ---------- Кнопка "Как это работает" ----------
+document.querySelector('.btn-ghost')?.addEventListener('click', function() {
+document.getElementById('how').scrollIntoView({ behavior: 'smooth' });
+});
+
+// ---------- Обработка ссылок в блоке с ценами ----------
+document.querySelectorAll('.plan .btn-primary').forEach(btn => {
+btn.addEventListener('click', function(e) {
+e.preventDefault();
+startOnboarding();
 });
 });
 </script>
-<!-- ========== КОНЕЦ ВСТАВКИ ========== -->
 
 </body>
 </html>
-```
