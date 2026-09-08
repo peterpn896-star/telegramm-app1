@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Черновик — практика английского с ИИ</title>
+
+<!-- Подключаем шрифты -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+
+<!-- ========== ВСТАВКА ДЛЯ TELEGRAM (ЧАСТЬ 1) ========== -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<style>
+/* Подхватываем тему Telegram */
+body {
+background-color: var(--tg-bg, #ffffff);
+color: var(--tg-text, #000000);
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+margin: 0;
+padding: 0;
+overflow-y: scroll; /* ← ДОБАВЛЕНО ДЛЯ СКРОЛЛА */
+}
+button {
+background-color: var(--tg-button, #2481cc);
+color: #ffffff;
+border: none;
+padding: 12px 24px;
+border-radius: 8px;
+font-size: 16px;
+cursor: pointer;
+}
+button:hover {
+opacity: 0.9;
+}
+</style>
+<!-- ========== КОНЕЦ ВСТАВКИ ========== -->
+
+<style>
+/* ===== ОСНОВНЫЕ СТИЛИ ОТ КЛОДА ===== */
+:root{
+--paper:#F1EEE6;
+--paper-deep:#E9E4D6;
+--rule:#D8D1BE;
+--ink:#221F1B;
+--ink-soft:#5B564D;
+--pen:#B8402A;
+--pen-soft:#D8CFC0;
+--highlight:#E8B84B;
+--forest:#28362F;
+--forest-light:#354A40;
+--cream:#FAF8F2;
+--radius:2px;
+}
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+margin:0;
+background:var(--paper);
+color:var(--ink);
+font-family:'Inter',sans-serif;
+font-size:16px;
+line-height:1.55;
+overflow-y: scroll; /* ← ДОБАВЛЕНО ДЛЯ СКРОЛЛА */
+}
+h1,h2,h3{
+font-family:'Fraunces',serif;
+font-weight:600;
+margin:0;
+color:var(--ink);
+}
+.annot{
+font-family:'Kalam',cursive;
+color:var(--pen);
+}
+a{color:inherit;text-decoration:none;}
+.wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
+img,svg{display:block;max-width:100%;}
+.topbar{
+display:flex;align-items:center;justify-content:space-between;
+padding:22px 28px;max-width:1080px;margin:0 auto;
+}
+.brand{font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:.2px;}
+.brand span{color:var(--pen);}
+.topbar .cta-small{
+border:1.5px solid var(--ink);
+padding:9px 18px;
+border-radius:999px;
+font-size:14px;
+font-weight:600;
+transition:background .2s ease, color .2s ease;
+}
+.topbar .cta-small:hover{background:var(--ink);color:var(--paper);}
+.hero{
+padding:36px 0 90px;
+}
+.spread{
+display:grid;
+grid-template-columns:1.05fr 1fr;
+gap:0;
+background:var(--cream);
+border-radius:6px;
+box-shadow:0 1px 0 rgba(0,0,0,.04);
+overflow:hidden;
+position:relative;
+animation:openBook .9s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes openBook{
+from{opacity:0; transform:translateY(14px) scale(.99);}
+to{opacity:1; transform:translateY(0) scale(1);}
+}
+.spread::after{
+content:"";
+position:absolute;top:0;bottom:0;left:calc(1.05fr - 1px);
+width:1px;background:var(--rule);
+}
+.page-left{
+padding:56px 48px 56px 52px;
+display:flex;flex-direction:column;justify-content:center;
+gap:22px;
+}
+.kicker{
+font-family:'Kalam',cursive;
+color:var(--pen);
+font-size:18px;
+transform:rotate(-1.5deg);
+display:inline-block;
+}
+.hero h1{
+font-size:44px;
+line-height:1.12;
+letter-spacing:-.5px;
+}
+.hero p.lede{
+font-size:17px;
+color:var(--ink-soft);
+max-width:44ch;
+}
+.hero-ctas{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px;}
+.btn-primary{
+background:var(--ink);
+color:var(--paper);
+padding:14px 26px;
+border-radius:999px;
+font-weight:600;
+font-size:15px;
+display:inline-block;
+transition:transform .15s ease, background .2s ease;
+}
+.btn-primary:hover{background:var(--pen);transform:translateY(-1px);}
+.btn-ghost{
+font-size:14px;
+color:var(--ink-soft);
+border-bottom:1px dashed var(--ink-soft);
+padding-bottom:2px;
+}
+.page-right{
+background:
+repeating-linear-gradient(var(--paper-deep) 0 1px, transparent 1px 34px);
+padding:52px 44px;
+display:flex;
+flex-direction:column;
+justify-content:center;
+gap:16px;
+}
+.bubble{
+max-width:86%;
+padding:12px 16px;
+border-radius:14px;
+font-size:14.5px;
+position:relative;
+}
+.bubble.user{
+align-self:flex-end;
+background:var(--forest);
+color:var(--cream);
+border-bottom-right-radius:4px;
+}
+.bubble.ai{
+align-self:flex-start;
+background:var(--cream);
+border:1px solid var(--rule);
+border-bottom-left-radius:4px;
+}
+.strike{text-decoration:line-through;text-decoration-color:var(--pen);opacity:.6;}
+.correction{
+font-family:'Kalam',cursive;
+color:var(--pen);
+font-size:16px;
+display:block;
+margin-top:4px;
+transform:rotate(-2deg);
+}
+.correction::before{content:"↳ ";}
+section{padding:78px 0;}
+.section-head{max-width:56ch;margin-bottom:44px;}
+.section-head h2{font-size:30px;letter-spacing:-.3px;}
+.section-head p{color:var(--ink-soft);margin-top:12px;font-size:15.5px;}
+.steps{
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:0;
+border-top:1px solid var(--rule);
+}
+.step{
+padding:30px 26px 30px 0;
+border-right:1px solid var(--rule);
+}
+.step:last-child{border-right:none;}
+.step-num{
+font-family:'Fraunces',serif;
+font-style:italic;
+color:var(--pen);
+font-size:15px;
+margin-bottom:14px;
+display:block;
+}
+.step h3{font-size:19px;margin-bottom:8px;}
+.step p{color:var(--ink-soft);font-size:14.5px;}
+.cards{
+display:grid;
+grid-template-columns:repeat(4,1fr);
+gap:22px;
+}
+.card{
+background:var(--cream);
+border:1px solid var(--rule);
+border-radius:4px;
+padding:24px 20px;
+box-shadow:0 1px 0 rgba(0,0,0,.03);
+}
+.card:nth-child(2){transform:rotate(.6deg);}
+.card:nth-child(3){transform:rotate(-.5deg);}
+.card h3{font-size:16.5px;margin-bottom:8px;}
+.card p{font-size:13.8px;color:var(--ink-soft);}
+.pricing-wrap{background:var(--forest);border-radius:8px;padding:56px 48px;color:var(--cream);}
+.pricing-wrap .section-head h2, .pricing-wrap .section-head p{color:var(--cream);}
+.pricing-wrap .section-head p{opacity:.75;}
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
+.plan{
+background:var(--forest-light);
+border-radius:6px;
+padding:30px 28px;
+border:1px solid rgba(255,255,255,.08);
+}
+.plan.pro{
+background:var(--cream);
+color:var(--ink);
+}
+.plan-name{font-family:'Fraunces',serif;font-size:22px;margin-bottom:4px;}
+.plan.pro .plan-name{color:var(--pen);}
+.plan-tag{font-family:'Kalam',cursive;font-size:14px;opacity:.7;margin-bottom:20px;display:block;}
+.price{font-family:'Fraunces',serif;font-size:34px;margin-bottom:20px;}
+.price span{font-size:15px;font-family:'Inter',sans-serif;opacity:.6;}
+.plan ul{list-style:none;padding:0;margin:0 0 26px;display:flex;flex-direction:column;gap:10px;}
+.plan li{font-size:14.5px;padding-left:20px;position:relative;}
+.plan li::before{content:"—";position:absolute;left:0;opacity:.5;}
+.plan .btn-primary{width:100%;text-align:center;}
+.plan.pro .btn-primary{background:var(--pen);color:var(--cream);}
+.final-cta{text-align:center;padding:90px 0 70px;}
+.final-cta h2{font-size:32px;max-width:20ch;margin:0 auto 22px;}
+footer{border-top:1px solid var(--rule);padding:30px 0;}
+footer .wrap{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;gap:10px;}
+@media(max-width:860px){
+.spread{grid-template-columns:1fr;}
+.spread::after{display:none;}
+.hero h1{font-size:32px;}
+.steps{grid-template-columns:1fr;}
+.step{border-right:none;border-bottom:1px solid var(--rule);padding:24px 0;}
+.cards{grid-template-columns:1fr 1fr;}
+.plans{grid-template-columns:1fr;}
+.pricing-wrap{padding:36px 24px;}
+}
+@media(max-width:560px){
+.cards{grid-template-columns:1fr;}
+.card:nth-child(2),.card:nth-child(3){transform:none;}
+}
+@media (prefers-reduced-motion: reduce){
+.spread{animation:none;}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
+<div class="topbar">
+<div class="brand">Черно<span>вик</span></div>
+<a href="https://t.me/Chern0vik_bot" class="cta-small">Открыть в Telegram</a>
+</div>
+
+<!-- ===== ГЛАВНЫЙ ЭКРАН ===== -->
+<div class="wrap hero">
+<div class="spread">
+<div class="page-left">
+<span class="kicker">практика без стыда за ошибки</span>
+<h1>Английский, который можно испортить и попробовать снова</h1>
+<p class="lede">Мини-приложение в Telegram: говорите с ИИ-собеседником на любые темы, когда удобно, а он мягко поправляет и помнит, над чем вы работаете.</p>
+<div class="hero-ctas">
+<a href="https://t.me/Chern0vik_bot" class="btn-primary">Открыть в Telegram</a>
+<a href="#how" class="btn-ghost">Как это работает</a>
+</div>
+</div>
+<div class="page-right">
+<div class="bubble user">I have went to the store yesterday</div>
+<div class="bubble ai">
+Almost! Small fix here:
+<span class="strike">have went</span>
+<span class="correction">went — простое прошедшее, без "have"</span>
+</div>
+<div class="bubble ai">Nice, so — what did you get there? 🙂</div>
+<div class="bubble user">Just some bread and coffee, nothing special</div>
+</div>
+</div>
+</div>
+
+<!-- ===== КАК ЭТО РАБОТАЕТ ===== -->
+<section id="how" class="wrap">
+<div class="section-head">
+<h2>Как это устроено</h2>
+<p>Три шага между установкой и первым нормальным разговором на английском.</p>
+</div>
+<div class="steps">
+<div class="step">
+<span class="step-num">01</span>
+<h3>Заполняете черновик о себе</h3>
+<p>Возраст, текущий уровень, темы, которые вам интересны, и зачем вам вообще английский — для собеседования, поездки или просто для себя.</p>
+</div>
+<div class="step">
+<span class="step-num">02</span>
+<h3>Говорите, когда удобно</h3>
+<p>ИИ-собеседник подстраивается под ваш уровень и держит разговор живым — без пауз, ожидания пары и неловкости.</p>
+</div>
+<div class="step">
+<span class="step-num">03</span>
+<h3>Видите, что подтянуть</h3>
+<p>Раз в день короткий разбор: какие ошибки повторяются, какие слова стоит выучить — без оценок и стыда.</p>
+</div>
+</div>
+</section>
+
+<!-- ===== ПОЧЕМУ ЧЕРНОВИК ===== -->
+<section class="wrap">
+<div class="section-head">
+<h2>Почему черновик, а не идеальный текст</h2>
+<p>Разговор с ИИ устроен так, чтобы ошибаться было безопасно и даже полезно.</p>
+</div>
+<div class="cards">
+<div class="card">
+<h3>Без ожидания</h3>
+<p>Собеседник свободен всегда — не нужно подстраиваться под чужой часовой пояс.</p>
+</div>
+<div class="card">
+<h3>Помнит контекст</h3>
+<p>Знает ваш уровень и темы, разговор продолжается там, где вы его оставили вчера.</p>
+</div>
+<div class="card">
+<h3>Мягкие исправления</h3>
+<p>Ошибки не обрывают разговор — они разбираются отдельно, спокойно, потом.</p>
+</div>
+<div class="card">
+<h3>Только между вами</h3>
+<p>Никаких оценок, рейтингов и сравнений — только ваши заметки и прогресс в удобном темпе.</p>
+</div>
+</div>
+</section>
+
+<!-- ===== ПРАЙС ===== -->
+<section class="wrap">
+<div class="pricing-wrap">
+<div class="section-head">
+<h2>Попробовать или остаться</h2>
+<p>Бесплатный черновик без срока давности.</p>
+</div>
+<div class="plans">
+<div class="plan">
+<div class="plan-name">Черновик</div>
+<span class="plan-tag">Бесплатно</span>
+<div class="price">$0</div>
+<ul>
+<li>Голосовые и текстовые диалоги</li>
+<li>Ежедневный разбор ошибок</li>
+<li>Хранит историю 30 дней</li>
+</ul>
+<a href="https://t.me/Chern0vik_bot" class="btn-primary">Начать</a>
+</div>
+<div class="plan pro">
+<div class="plan-name">Плюс</div>
+<span class="plan-tag">Для тех, кто любит замечать прогресс</span>
+<div class="price">$7 <span>/мес</span></div>
+<ul>
+<li>Неограниченная история диалогов</li>
+<li>Тренировка произношения</li>
+<li>Персональный план повторения слов</li>
+</ul>
+<a href="https://t.me/Chern0vik_bot" class="btn-primary">Подписаться</a>
+</div>
+</div>
+</div>
+</section>
+
+<!-- ===== ФИНАЛЬНЫЙ ПРИЗЫВ ===== -->
+<div class="wrap final-cta">
+<h2>Ошибки — это просто черновик ✍️</h2>
+<a href="https://t.me/Chern0vik_bot" class="btn-primary">Начать говорить</a>
+</div>
+
+<!-- ===== ПОДВАЛ ===== -->
+<footer>
+<div class="wrap">
+<span>Черновик 2026</span>
+<span>Сделано для тех, кто учит английский без стеснения</span>
+</div>
+</footer>
+
+<!-- ========== ВСТАВКА ДЛЯ TELEGRAM (ЧАСТЬ 2) ========== -->
+<script>
+// Получаем доступ к Telegram Web App
+const tg = window.Telegram.WebApp;
+
+// Сообщаем Telegram, что приложение загружено
+tg.ready();
+
+// Разворачиваем на весь экран
+tg.expand();
+
+// Показываем главную кнопку
+tg.MainButton.setText('Отправить');
+tg.MainButton.show();
+
+// Обработчик для всех кнопок на странице
+document.querySelectorAll('a.btn-primary, a.cta-small').forEach(btn => {
+btn.addEventListener('click', function(e) {
+// Если ссылка ведет в Telegram, отправляем событие
+if (this.href.includes('t.me')) {
+e.preventDefault();
+tg.sendData('open_bot');
+tg.showAlert('Открываем бота...');
+}
+});
+});
+</script>
+<!-- ========== КОНЕЦ ВСТАВКИ ========== -->
+
+</body>
+</html>
+```
