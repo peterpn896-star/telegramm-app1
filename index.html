@@ -2,274 +2,353 @@
 <html lang="ru">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Черновик — практика английского с ИИ</title>
 
-<!-- Подключаем шрифты -->
+<!-- Telegram Web App SDK -->
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<!-- Google Fonts -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:wght@400;500;600;700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;1,9..144,500&family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&family=Kalam:wght@400;700&display=swap" rel="stylesheet">
 
-<!-- ========== ВСТАВКА ДЛЯ TELEGRAM ========== -->
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 <style>
-/* Подхватываем тему Telegram */
-body {
-background-color: var(--tg-bg, #ffffff);
-color: var(--tg-text, #000000);
-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-margin: 0;
-padding: 0;
-overflow-y: scroll;
+/* ===== ПЕРЕМЕННЫЕ ===== */
+:root {
+--paper: #F1EEE6;
+--paper-deep: #E9E4D6;
+--rule: #D8D1BE;
+--ink: #221F1B;
+--ink-soft: #5B564D;
+--pen: #B8402A;
+--pen-soft: #D8CFC0;
+--highlight: #E8B84B;
+--forest: #28362F;
+--forest-light: #354A40;
+--cream: #FAF8F2;
+--radius: 2px;
 }
-button {
-background-color: var(--tg-button, #2481cc);
-color: #ffffff;
-border: none;
-padding: 12px 24px;
-border-radius: 8px;
+
+/* ===== ОБЩИЕ СТИЛИ ===== */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+margin: 0;
+background: var(--paper);
+color: var(--ink);
+font-family: 'Inter', sans-serif;
 font-size: 16px;
+line-height: 1.55;
+overflow-y: scroll;
+-webkit-font-smoothing: antialiased;
+}
+h1, h2, h3 {
+font-family: 'Fraunces', serif;
+font-weight: 600;
+margin: 0;
+color: var(--ink);
+}
+a { color: inherit; text-decoration: none; cursor: pointer; }
+.wrap { max-width: 1080px; margin: 0 auto; padding: 0 28px; }
+
+/* ===== ВЕРХНЯЯ ПАНЕЛЬ ===== */
+.topbar {
+display: flex;
+align-items: center;
+justify-content: space-between;
+padding: 22px 28px;
+max-width: 1080px;
+margin: 0 auto;
+}
+.brand {
+font-family: 'Fraunces', serif;
+font-weight: 600;
+font-size: 22px;
+letter-spacing: 0.2px;
+}
+.brand span { color: var(--pen); }
+
+/* ===== ГЕРОЙ ===== */
+.hero { padding: 36px 0 90px; }
+.spread {
+display: grid;
+grid-template-columns: 1.05fr 1fr;
+gap: 0;
+background: var(--cream);
+border-radius: 6px;
+box-shadow: 0 1px 0 rgba(0,0,0,.04);
+overflow: hidden;
+position: relative;
+animation: openBook .9s cubic-bezier(.2,.7,.3,1) both;
+}
+@keyframes openBook {
+from { opacity: 0; transform: translateY(14px) scale(.99); }
+to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.spread::after {
+content: "";
+position: absolute;
+top: 0; bottom: 0;
+left: calc(1.05fr - 1px);
+width: 1px;
+background: var(--rule);
+}
+.page-left {
+padding: 56px 48px 56px 52px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 22px;
+}
+.kicker {
+font-family: 'Kalam', cursive;
+color: var(--pen);
+font-size: 18px;
+transform: rotate(-1.5deg);
+display: inline-block;
+}
+.hero h1 {
+font-size: 44px;
+line-height: 1.12;
+letter-spacing: -0.5px;
+}
+.hero p.lede {
+font-size: 17px;
+color: var(--ink-soft);
+max-width: 44ch;
+}
+.hero-ctas {
+display: flex;
+gap: 14px;
+align-items: center;
+flex-wrap: wrap;
+margin-top: 6px;
+}
+
+/* ===== КНОПКИ ===== */
+.btn-primary {
+background: var(--ink);
+color: var(--paper);
+padding: 14px 26px;
+border-radius: 999px;
+font-weight: 600;
+font-size: 15px;
+display: inline-block;
+transition: transform .15s ease, background .2s ease;
+border: none;
+font-family: inherit;
 cursor: pointer;
 }
-button:hover {
-opacity: 0.9;
+.btn-primary:hover { background: var(--pen); transform: translateY(-1px); }
+.btn-ghost {
+font-size: 14px;
+color: var(--ink-soft);
+border-bottom: 1px dashed var(--ink-soft);
+padding-bottom: 2px;
+background: transparent;
+cursor: pointer;
+font-family: inherit;
 }
-</style>
-<!-- ========== КОНЕЦ ВСТАВКИ ========== -->
+.btn-ghost:hover { color: var(--pen); }
 
-<style>
-/* ===== ОСНОВНЫЕ СТИЛИ ===== */
-:root{
---paper:#F1EEE6;
---paper-deep:#E9E4D6;
---rule:#D8D1BE;
---ink:#221F1B;
---ink-soft:#5B564D;
---pen:#B8402A;
---pen-soft:#D8CFC0;
---highlight:#E8B84B;
---forest:#28362F;
---forest-light:#354A40;
---cream:#FAF8F2;
---radius:2px;
+/* ===== ПРАВАЯ ЧАСТЬ ГЕРОЯ (ДИАЛОГИ) ===== */
+.page-right {
+background: repeating-linear-gradient(var(--paper-deep) 0 1px, transparent 1px 34px);
+padding: 52px 44px;
+display: flex;
+flex-direction: column;
+justify-content: center;
+gap: 16px;
 }
-*{box-sizing:border-box;}
-html{scroll-behavior:smooth;}
-body{
-margin:0;
-background:var(--paper);
-color:var(--ink);
-font-family:'Inter',sans-serif;
-font-size:16px;
-line-height:1.55;
-overflow-y: scroll;
+.bubble {
+max-width: 86%;
+padding: 12px 16px;
+border-radius: 14px;
+font-size: 14.5px;
+position: relative;
 }
-h1,h2,h3{
-font-family:'Fraunces',serif;
-font-weight:600;
-margin:0;
-color:var(--ink);
+.bubble.user {
+align-self: flex-end;
+background: var(--forest);
+color: var(--cream);
+border-bottom-right-radius: 4px;
 }
-.annot{
-font-family:'Kalam',cursive;
-color:var(--pen);
+.bubble.ai {
+align-self: flex-start;
+background: var(--cream);
+border: 1px solid var(--rule);
+border-bottom-left-radius: 4px;
 }
-a{color:inherit;text-decoration:none;cursor:pointer;}
-.wrap{max-width:1080px;margin:0 auto;padding:0 28px;}
-img,svg{display:block;max-width:100%;}
+.strike {
+text-decoration: line-through;
+text-decoration-color: var(--pen);
+opacity: .6;
+}
+.correction {
+font-family: 'Kalam', cursive;
+color: var(--pen);
+font-size: 16px;
+display: block;
+margin-top: 4px;
+transform: rotate(-2deg);
+}
+.correction::before { content: "↳ "; }
 
-/* ---------- top bar (кнопка удалена) ---------- */
-.topbar{
-display:flex;align-items:center;justify-content:space-between;
-padding:22px 28px;max-width:1080px;margin:0 auto;
-}
-.brand{font-family:'Fraunces',serif;font-weight:600;font-size:22px;letter-spacing:.2px;}
-.brand span{color:var(--pen);}
+/* ===== СЕКЦИИ ===== */
+section { padding: 78px 0; }
+.section-head { max-width: 56ch; margin-bottom: 44px; }
+.section-head h2 { font-size: 30px; letter-spacing: -0.3px; }
+.section-head p { color: var(--ink-soft); margin-top: 12px; font-size: 15.5px; }
 
-/* ---------- hero ---------- */
-.hero{
-padding:36px 0 90px;
+/* ===== ШАГИ ===== */
+.steps {
+display: grid;
+grid-template-columns: repeat(3, 1fr);
+gap: 0;
+border-top: 1px solid var(--rule);
 }
-.spread{
-display:grid;
-grid-template-columns:1.05fr 1fr;
-gap:0;
-background:var(--cream);
-border-radius:6px;
-box-shadow:0 1px 0 rgba(0,0,0,.04);
-overflow:hidden;
-position:relative;
-animation:openBook .9s cubic-bezier(.2,.7,.3,1) both;
+.step {
+padding: 30px 26px 30px 0;
+border-right: 1px solid var(--rule);
 }
-@keyframes openBook{
-from{opacity:0; transform:translateY(14px) scale(.99);}
-to{opacity:1; transform:translateY(0) scale(1);}
+.step:last-child { border-right: none; }
+.step-num {
+font-family: 'Fraunces', serif;
+font-style: italic;
+color: var(--pen);
+font-size: 15px;
+margin-bottom: 14px;
+display: block;
 }
-.spread::after{
-content:"";
-position:absolute;top:0;bottom:0;left:calc(1.05fr - 1px);
-width:1px;background:var(--rule);
-}
-.page-left{
-padding:56px 48px 56px 52px;
-display:flex;flex-direction:column;justify-content:center;
-gap:22px;
-}
-.kicker{
-font-family:'Kalam',cursive;
-color:var(--pen);
-font-size:18px;
-transform:rotate(-1.5deg);
-display:inline-block;
-}
-.hero h1{
-font-size:44px;
-line-height:1.12;
-letter-spacing:-.5px;
-}
-.hero p.lede{
-font-size:17px;
-color:var(--ink-soft);
-max-width:44ch;
-}
-.hero-ctas{display:flex;gap:14px;align-items:center;flex-wrap:wrap;margin-top:6px;}
+.step h3 { font-size: 19px; margin-bottom: 8px; }
+.step p { color: var(--ink-soft); font-size: 14.5px; }
 
-/* ---------- кнопки ---------- */
-.btn-primary{
-background:var(--ink);
-color:var(--paper);
-padding:14px 26px;
-border-radius:999px;
-font-weight:600;
-font-size:15px;
-display:inline-block;
-transition:transform .15s ease, background .2s ease;
-border:none;
-font-family:inherit;
-cursor:pointer;
+/* ===== КАРТОЧКИ ===== */
+.cards {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 22px;
 }
-.btn-primary:hover{background:var(--pen);transform:translateY(-1px);}
-.btn-ghost{
-font-size:14px;
-color:var(--ink-soft);
-border-bottom:1px dashed var(--ink-soft);
-padding-bottom:2px;
-background:transparent;
-cursor:pointer;
-font-family:inherit;
+.card {
+background: var(--cream);
+border: 1px solid var(--rule);
+border-radius: 4px;
+padding: 24px 20px;
+box-shadow: 0 1px 0 rgba(0,0,0,.03);
 }
-.btn-ghost:hover{color:var(--pen);}
+.card:nth-child(2) { transform: rotate(.6deg); }
+.card:nth-child(3) { transform: rotate(-.5deg); }
+.card h3 { font-size: 16.5px; margin-bottom: 8px; }
+.card p { font-size: 13.8px; color: var(--ink-soft); }
 
-/* ---------- остальные стили ---------- */
-.page-right{
-background:
-repeating-linear-gradient(var(--paper-deep) 0 1px, transparent 1px 34px);
-padding:52px 44px;
-display:flex;
-flex-direction:column;
-justify-content:center;
-gap:16px;
+/* ===== ПРАЙС ===== */
+.pricing-wrap {
+background: var(--forest);
+border-radius: 8px;
+padding: 56px 48px;
+color: var(--cream);
 }
-.bubble{
-max-width:86%;
-padding:12px 16px;
-border-radius:14px;
-font-size:14.5px;
-position:relative;
-}
-.bubble.user{
-align-self:flex-end;
-background:var(--forest);
-color:var(--cream);
-border-bottom-right-radius:4px;
-}
-.bubble.ai{
-align-self:flex-start;
-background:var(--cream);
-border:1px solid var(--rule);
-border-bottom-left-radius:4px;
-}
-.strike{text-decoration:line-through;text-decoration-color:var(--pen);opacity:.6;}
-.correction{
-font-family:'Kalam',cursive;
-color:var(--pen);
-font-size:16px;
-display:block;
-margin-top:4px;
-transform:rotate(-2deg);
-}
-.correction::before{content:"↳ ";}
-section{padding:78px 0;}
-.section-head{max-width:56ch;margin-bottom:44px;}
-.section-head h2{font-size:30px;letter-spacing:-.3px;}
-.section-head p{color:var(--ink-soft);margin-top:12px;font-size:15.5px;}
-.steps{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:0;
-border-top:1px solid var(--rule);
-}
-.step{
-padding:30px 26px 30px 0;
-border-right:1px solid var(--rule);
-}
-.step:last-child{border-right:none;}
-.step-num{
-font-family:'Fraunces',serif;
-font-style:italic;
-color:var(--pen);
-font-size:15px;
-margin-bottom:14px;
-display:block;
-}
-.step h3{font-size:19px;margin-bottom:8px;}
-.step p{color:var(--ink-soft);font-size:14.5px;}
-.cards{
-display:grid;
-grid-template-columns:repeat(4,1fr);
-gap:22px;
-}
-.card{
-background:var(--cream);
-border:1px solid var(--rule);
-border-radius:4px;
-padding:24px 20px;
-box-shadow:0 1px 0 rgba(0,0,0,.03);
-}
-.card:nth-child(2){transform:rotate(.6deg);}
-.card:nth-child(3){transform:rotate(-.5deg);}
-.card h3{font-size:16.5px;margin-bottom:8px;}
-.card p{font-size:13.8px;color:var(--ink-soft);}
-.pricing-wrap{background:var(--forest);border-radius:8px;padding:56px 48px;color:var(--cream);}
-.pricing-wrap .section-head h2, .pricing-wrap .section-head p{color:var(--cream);}
-.pricing-wrap .section-head p{opacity:.75;}
-.plans{display:grid;grid-template-columns:1fr 1fr;gap:26px;}
-.plan{
-background:var(--forest-light);
-border-radius:6px;
-padding:30px 28px;
-border:1px solid rgba(255,255,255,.08);
-}
-.plan.pro{
-background:var(--cream);
-color:var(--ink);
-}
-.plan-name{font-family:'Fraunces',serif;font-size:22px;margin-bottom:4px;}
-.plan.pro .plan-name{color:var(--pen);}
-.plan-tag{font-family:'Kalam',cursive;font-size:14px;opacity:.7;margin-bottom:20px;display:block;}
-.price{font-family:'Fraunces',serif;font-size:34px;margin-bottom:20px;}
-.price span{font-size:15px;font-family:'Inter',sans-serif;opacity:.6;}
-.plan ul{list-style:none;padding:0;margin:0 0 26px;display:flex;flex-direction:column;gap:10px;}
-.plan li{font-size:14.5px;padding-left:20px;position:relative;}
-.plan li::before{content:"—";position:absolute;left:0;opacity:.5;}
-.plan .btn-primary{width:100%;text-align:center;}
-.plan.pro .btn-primary{background:var(--pen);color:var(--cream);}
-.final-cta{text-align:center;padding:90px 0 70px;}
-.final-cta h2{font-size:32px;max-width:20ch;margin:0 auto 22px;}
-footer{border-top:1px solid var(--rule);padding:30px 0;}
-footer .wrap{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);flex-wrap:wrap;gap:10px;}
+.pricing-wrap .section-head h2,
+.pricing-wrap .section-head p { color: var(--cream); }
+.pricing-wrap .section-head p { opacity: .75; }
 
-/* ---------- онбординг (скрыт по умолчанию) ---------- */
+.plans {
+display: grid;
+grid-template-columns: 1fr 1fr;
+gap: 26px;
+}
+.plan {
+background: var(--forest-light);
+border-radius: 6px;
+padding: 30px 28px;
+border: 1px solid rgba(255,255,255,.08);
+}
+.plan.pro {
+background: var(--cream);
+color: var(--ink);
+}
+.plan-name {
+font-family: 'Fraunces', serif;
+font-size: 22px;
+margin-bottom: 4px;
+}
+.plan.pro .plan-name { color: var(--pen); }
+.plan-tag {
+font-family: 'Kalam', cursive;
+font-size: 14px;
+opacity: .7;
+margin-bottom: 20px;
+display: block;
+}
+.price {
+font-family: 'Inter', sans-serif;
+font-weight: 700;
+font-size: 34px;
+margin-bottom: 20px;
+letter-spacing: -0.5px;
+}
+.price .currency {
+font-size: 18px;
+font-weight: 500;
+opacity: .6;
+margin-left: 2px;
+}
+.plan ul {
+list-style: none;
+padding: 0;
+margin: 0 0 26px;
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+.plan li {
+font-size: 14.5px;
+padding-left: 20px;
+position: relative;
+}
+.plan li::before {
+content: "—";
+position: absolute;
+left: 0;
+opacity: .5;
+}
+.plan .btn-primary {
+width: 100%;
+text-align: center;
+}
+.plan.pro .btn-primary {
+background: var(--pen);
+color: var(--cream);
+}
+
+/* ===== ФИНАЛЬНЫЙ ПРИЗЫВ ===== */
+.final-cta {
+text-align: center;
+padding: 90px 0 70px;
+}
+.final-cta h2 {
+font-size: 32px;
+max-width: 20ch;
+margin: 0 auto 22px;
+}
+
+/* ===== ПОДВАЛ ===== */
+footer {
+border-top: 1px solid var(--rule);
+padding: 30px 0;
+}
+footer .wrap {
+display: flex;
+justify-content: space-between;
+align-items: center;
+font-size: 13px;
+color: var(--ink-soft);
+flex-wrap: wrap;
+gap: 10px;
+}
+
+/* ===== ОНБОРДИНГ (ФОРМА РЕГИСТРАЦИИ) ===== */
 #onboarding {
 display: none;
 padding: 40px 28px;
@@ -277,7 +356,7 @@ max-width: 600px;
 margin: 0 auto;
 background: var(--cream);
 border-radius: 12px;
-box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+box-shadow: 0 4px 20px rgba(0,0,0,.06);
 }
 #onboarding.active {
 display: block;
@@ -291,7 +370,7 @@ to { opacity: 1; transform: translateY(0); }
 font-size: 28px;
 margin-bottom: 8px;
 }
-#onboarding p.sub {
+#onboarding .sub {
 color: var(--ink-soft);
 margin-bottom: 28px;
 }
@@ -337,33 +416,32 @@ cursor: pointer;
 width: 100%;
 transition: opacity 0.2s;
 }
-.btn-start:hover {
-opacity: 0.85;
-}
+.btn-start:hover { opacity: 0.85; }
 
-@media(max-width:860px){
-.spread{grid-template-columns:1fr;}
-.spread::after{display:none;}
-.hero h1{font-size:32px;}
-.steps{grid-template-columns:1fr;}
-.step{border-right:none;border-bottom:1px solid var(--rule);padding:24px 0;}
-.cards{grid-template-columns:1fr 1fr;}
-.plans{grid-template-columns:1fr;}
-.pricing-wrap{padding:36px 24px;}
-.form-row{grid-template-columns:1fr;}
+/* ===== АДАПТИВ ===== */
+@media (max-width: 860px) {
+.spread { grid-template-columns: 1fr; }
+.spread::after { display: none; }
+.hero h1 { font-size: 32px; }
+.steps { grid-template-columns: 1fr; }
+.step { border-right: none; border-bottom: 1px solid var(--rule); padding: 24px 0; }
+.cards { grid-template-columns: 1fr 1fr; }
+.plans { grid-template-columns: 1fr; }
+.pricing-wrap { padding: 36px 24px; }
+.form-row { grid-template-columns: 1fr; }
 }
-@media(max-width:560px){
-.cards{grid-template-columns:1fr;}
-.card:nth-child(2),.card:nth-child(3){transform:none;}
+@media (max-width: 560px) {
+.cards { grid-template-columns: 1fr; }
+.card:nth-child(2), .card:nth-child(3) { transform: none; }
 }
-@media (prefers-reduced-motion: reduce){
-.spread{animation:none;}
+@media (prefers-reduced-motion: reduce) {
+.spread { animation: none; }
 }
 </style>
 </head>
 <body>
 
-<!-- ===== ВЕРХНЯЯ ПАНЕЛЬ (кнопка удалена) ===== -->
+<!-- ===== ВЕРХНЯЯ ПАНЕЛЬ ===== -->
 <div class="topbar">
 <div class="brand">Черно<span>вик</span></div>
 </div>
@@ -376,9 +454,8 @@ opacity: 0.85;
 <h1>Английский, который можно испортить и попробовать снова</h1>
 <p class="lede">Мини-приложение в Telegram: говорите с ИИ-собеседником на любые темы, когда удобно, а он мягко поправляет и помнит, над чем вы работаете.</p>
 <div class="hero-ctas">
-<!-- ГЛАВНАЯ КНОПКА — теперь ведёт к онбордингу -->
 <button class="btn-primary" onclick="startOnboarding()">Начать бесплатно</button>
-<button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({behavior:'smooth'})">Как это работает</button>
+<button class="btn-ghost" onclick="document.getElementById('how').scrollIntoView({ behavior: 'smooth' })">Как это работает</button>
 </div>
 </div>
 <div class="page-right">
@@ -394,7 +471,7 @@ Almost! Small fix here:
 </div>
 </div>
 
-<!-- ===== ОНБОРДИНГ (ФОРМА РЕГИСТРАЦИИ) ===== -->
+<!-- ===== ОНБОРДИНГ ===== -->
 <div id="onboarding" class="wrap">
 <h2>✍️ Давайте познакомимся</h2>
 <p class="sub">Расскажите о себе, чтобы я подстроил разговор под ваш уровень.</p>
@@ -433,7 +510,7 @@ Almost! Small fix here:
 </select>
 </div>
 
-<button class="btn-start" onclick="startChat()">🚀 Начать общение</button>
+<button class="btn-start" onclick="startRegistration()">🚀 Начать общение</button>
 </div>
 
 <!-- ===== КАК ЭТО РАБОТАЕТ ===== -->
@@ -498,7 +575,7 @@ Almost! Small fix here:
 <div class="plan">
 <div class="plan-name">Черновик</div>
 <span class="plan-tag">Бесплатно</span>
-<div class="price">$0</div>
+<div class="price">0 <span class="currency">₽</span></div>
 <ul>
 <li>Голосовые и текстовые диалоги</li>
 <li>Ежедневный разбор ошибок</li>
@@ -509,7 +586,7 @@ Almost! Small fix here:
 <div class="plan pro">
 <div class="plan-name">Плюс</div>
 <span class="plan-tag">Для тех, кто любит замечать прогресс</span>
-<div class="price">$7 <span>/мес</span></div>
+<div class="price">399 <span class="currency">₽</span></div>
 <ul>
 <li>Неограниченная история диалогов</li>
 <li>Тренировка произношения</li>
@@ -535,48 +612,151 @@ Almost! Small fix here:
 </div>
 </footer>
 
-<!-- ========== JAVASCRIPT ========== -->
+<!-- ============================================================ -->
+<!-- ===== JAVASCRIPT ===== -->
+<!-- ============================================================ -->
 <script>
-// ---------- Telegram ----------
+// ===== Telegram Web App =====
 const tg = window.Telegram?.WebApp;
 if (tg) {
 tg.ready();
 tg.expand();
-tg.MainButton.setText('Отправить');
-tg.MainButton.show();
 }
 
-// ---------- Онбординг ----------
+// ===== Показать онбординг =====
 function startOnboarding() {
 const el = document.getElementById('onboarding');
 el.classList.add('active');
 el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function startChat() {
+// ===== Запуск регистрации (после заполнения формы) =====
+function startRegistration() {
 const name = document.getElementById('userName').value.trim();
+const age = document.getElementById('userAge').value;
+const level = document.getElementById('userLevel').value;
+const goal = document.getElementById('userGoal').value;
+
 if (!name) {
 alert('Пожалуйста, введите ваше имя');
 return;
 }
-// Здесь позже добавим переход в чат
-alert('🎉 Привет, ' + name + '! Чат с ИИ будет доступен после подключения бэкенда.');
-// В будущем: скрыть онбординг, показать чат
+
+// Сохраняем профиль во временную переменную
+window.userProfile = { name, age, level, goal };
+
+// Скрываем онбординг
+document.getElementById('onboarding').classList.remove('active');
+
+// Показываем главную кнопку Telegram для запроса номера
+if (tg) {
+tg.MainButton.setText('📱 Подтвердить номер');
+tg.MainButton.color = '#B8402A';
+tg.MainButton.textColor = '#FFFFFF';
+tg.MainButton.show();
+
+// Навешиваем обработчик (если ещё не навешен)
+if (!window.phoneHandlerAttached) {
+window.phoneHandlerAttached = true;
+tg.MainButton.onClick(handlePhoneRequest);
+}
+} else {
+alert('Telegram Web App не найден. Пожалуйста, откройте приложение через Telegram.');
+}
 }
 
-// ---------- Кнопка "Как это работает" ----------
+// ===== Обработчик запроса номера телефона =====
+function handlePhoneRequest() {
+const tg = window.Telegram.WebApp;
+
+tg.requestContact((success, contactData) => {
+if (success) {
+const phone = contactData.phone_number;
+const user = tg.initDataUnsafe?.user || {};
+const profile = window.userProfile || {};
+
+// Собираем все данные для регистрации
+const payload = {
+telegram_id: user.id || 0,
+username: user.username || '',
+first_name: user.first_name || '',
+last_name: user.last_name || '',
+phone: phone,
+name: profile.name || '',
+age: profile.age || null,
+level: profile.level || 'A2',
+goal: profile.goal || 'conversation',
+initData: tg.initData || ''
+};
+
+console.log('📦 Данные для регистрации:', payload);
+
+// Показываем индикатор загрузки
+tg.MainButton.showProgress();
+
+// ===== ОТПРАВКА НА СЕРВЕР =====
+// ⚠️ ЗАМЕНИТЕ URL НА АДРЕС ВАШЕГО СЕРВЕРА
+fetch('https://ваш-сервер.com/api/register', {
+method: 'POST',
+headers: {
+'Content-Type': 'application/json'
+},
+body: JSON.stringify(payload)
+})
+.then(response => response.json())
+.then(result => {
+tg.MainButton.hideProgress();
+if (result.success) {
+tg.showAlert('🎉 Добро пожаловать, ' + profile.name + '!');
+tg.MainButton.setText('✅ Аккаунт создан');
+tg.MainButton.disable();
+
+// Сохраняем токен (если сервер вернул)
+if (result.token) {
+localStorage.setItem('userToken', result.token);
+}
+localStorage.setItem('userData', JSON.stringify(payload));
+
+// Переход в чат (позже)
+tg.showAlert('✨ Чат с ИИ скоро появится!');
+} else {
+tg.showAlert('❌ Ошибка: ' + (result.message || 'Не удалось создать аккаунт'));
+// Возвращаем кнопку для повторной попытки
+tg.MainButton.setText('📱 Попробовать снова');
+tg.MainButton.enable();
+}
+})
+.catch(error => {
+tg.MainButton.hideProgress();
+console.error('Ошибка запроса:', error);
+tg.showAlert('❌ Ошибка соединения с сервером. Проверьте интернет.');
+tg.MainButton.setText('📱 Попробовать снова');
+tg.MainButton.enable();
+});
+
+} else {
+// Пользователь отказался
+tg.showAlert('❌ Без номера телефона мы не можем создать аккаунт');
+}
+});
+}
+
+// ===== Кнопка "Как это работает" =====
 document.querySelector('.btn-ghost')?.addEventListener('click', function() {
 document.getElementById('how').scrollIntoView({ behavior: 'smooth' });
 });
 
-// ---------- Обработка ссылок в блоке с ценами ----------
+// ===== Кнопки в блоке с ценами =====
 document.querySelectorAll('.plan .btn-primary').forEach(btn => {
 btn.addEventListener('click', function(e) {
 e.preventDefault();
 startOnboarding();
 });
 });
+
+console.log('✅ Черновик загружен!');
 </script>
 
 </body>
 </html>
+
