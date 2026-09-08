@@ -712,7 +712,7 @@ body: JSON.stringify(payload)
 .then(result => {
 tg.MainButton.hideProgress();
 if (result.success) {
-tg.showAlert('🎉 Добро пожаловать, ' + profile.name + '!');
+tg.snowAlert('🎉 Добро пожаловать, ' + profile.name + '!');
 tg.MainButton.setText('✅ Аккаунт создан');
 tg.MainButton.disable();
 
