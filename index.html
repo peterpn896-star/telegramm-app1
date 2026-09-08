@@ -141,16 +141,22 @@ font-family: inherit;
 cursor: pointer;
 }
 .btn-primary:hover { background: var(--pen); transform: translateY(-1px); }
+
+/* ===== ИСПРАВЛЕННАЯ КНОПКА "КАК ЭТО РАБОТАЕТ" ===== */
 .btn-ghost {
 font-size: 14px;
 color: var(--ink-soft);
-border-bottom: 1px dashed var(--ink-soft);
-padding-bottom: 2px;
 background: transparent;
 cursor: pointer;
 font-family: inherit;
+padding: 0;
+border: none;
+transition: color 0.2s;
 }
-.btn-ghost:hover { color: var(--pen); }
+.btn-ghost:hover {
+color: var(--pen);
+text-decoration: underline;
+}
 
 /* ===== ПРАВАЯ ЧАСТЬ ГЕРОЯ (ДИАЛОГИ) ===== */
 .page-right {
@@ -759,4 +765,3 @@ console.log('✅ Черновик загружен!');
 
 </body>
 </html>
-
